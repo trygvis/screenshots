@@ -1,7 +1,9 @@
 # Screen capture tests
 # Note: flutter driver expects a pair of files eg, main.dart and main_test.dart
+driver: test_driver/integration_test.dart
+
 tests:
-  - test_driver/main.dart
+  - integration_test/main_test.dart
 
 # Interim location of screenshots from tests before processing
 staging: /tmp/screenshots
@@ -15,9 +17,9 @@ locales:
 devices:
   android:
     Nexus 6P:
-      orientation:
-        - Portrait
-        - LandscapeRight
+      # orientation:
+      #   - Portrait
+      #   - LandscapeRight
 
 # Frame screenshots
 frame: true

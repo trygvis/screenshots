@@ -42,7 +42,10 @@ Future _clearFastlaneDir(Screens screens, String deviceName, String locale,
   // delete images ending with .kImageExtension
   // for compatibility with FrameIt
   // (see https://github.com/mmcc007/screenshots/issues/61)
-  deleteMatchingFiles(dirPath, RegExp('$deviceName.*.$kImageExtension'));
+  final regDeviceName = deviceName
+      .replaceAll('(', '\\(')
+      .replaceAll(')', '\\)'); // escape "(" and ")"
+  deleteMatchingFiles(dirPath, RegExp('$regDeviceName.*.$kImageExtension'));
   if (runMode == RunMode.normal) {
     // delete all diff files (if any)
     deleteMatchingFiles(
@@ -59,7 +62,7 @@ const kFastlaneTenInch = 'tenInch';
 // android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
 /// Generate fastlane dir path for ios or android.
 String getDirPath(
-    DeviceType deviceType, String locale, String androidModelType) {
+    DeviceType deviceType, String locale, String? androidModelType) {
   locale = locale.replaceAll('_', '-'); // in case canonicalized
   const androidPrefix = 'android/fastlane/metadata/android';
   const iosPrefix = 'ios/fastlane/screenshots';
@@ -75,13 +78,13 @@ String getDirPath(
 }
 
 /// Get android model type (phone or tablet screen size).
-String getAndroidModelType(ScreenInfo? screen, String deviceName) {
-  var androidDeviceType = kFastlanePhone;
+String? getAndroidModelType(ScreenInfo? screen, String deviceName) {
+  String? androidDeviceType = kFastlanePhone;
   if (screen == null) {
     printStatus(
         'Warning: using default value \'$kFastlanePhone\' in \'$deviceName\' fastlane directory.');
   } else {
-    androidDeviceType = screen.destName!;
+    androidDeviceType = screen.destName;
   }
   return androidDeviceType;
 }

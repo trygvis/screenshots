@@ -1,7 +1,9 @@
 # Screen capture tests
 # Note: flutter driver expects a pair of files eg, main.dart and main_test.dart
+driver: test_driver/integration_test.dart
+
 tests:
-  - test_driver/main.dart
+  - integration_test/main_test.dart
 
 # Interim location of screenshots from tests before processing
 staging: /tmp/screenshots
@@ -30,9 +32,9 @@ frame: true
 # Run mode can be one of 'normal' (default), 'recording', 'comparison' or 'archive'.
 
 # If run mode is 'recording' or 'comparison', a directory is required for recorded images.
-recording: /tmp/screenshots_record
+# recording: /tmp/screenshots_record
 
 # If not intending to upload screenshots, images can be stored in an archive dir.
 # This over-rides output to fastlane dirs.
 # If run mode is 'archive', a directory is required for archived images.
-archive: /tmp/screenshots_archive
+# archive: /tmp/screenshots_archive

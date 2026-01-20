@@ -28,7 +28,7 @@ class ImageProcessor {
 
   /// Process screenshots.
   ///
-  /// If android, screenshot is overlaid with a status bar and appended with
+  /// If android, screenshot is overlaid with a status bar and overlaid with
   /// a navbar.
   ///
   /// If ios, screenshot is overlaid with a status bar.
@@ -71,8 +71,9 @@ class ImageProcessor {
             await append(_config.stagingDir, paths, screenshotPath.path);
           }
 
-          await frame(_config.stagingDir, screenProps, paths,
-              screenshotPath.path, device.deviceType, runMode);
+          // TODO: don't add frame, let frameit handle this. Atleast add config option to deactivate
+          // await frame(_config.stagingDir, screenProps, paths,
+          //     screenshotPath.path, device.deviceType, runMode);
         }
         status.stop();
       } else {
@@ -84,7 +85,8 @@ class ImageProcessor {
     if (screenshotPaths.isNotEmpty) {
       final androidModelType =
           fastlane.getAndroidModelType(screenProps, device.name);
-      var dstDir = fastlane.getDirPath(device.deviceType, locale, androidModelType);
+      var dstDir =
+          fastlane.getDirPath(device.deviceType, locale, androidModelType);
       runMode == RunMode.recording
           ? dstDir = '${_config.recordingDir!}/$dstDir'
           : null;
@@ -178,7 +180,7 @@ class ImageProcessor {
 
     final options = {
       'screenshotPath': screenshotPath,
-      'statusbarPath': statusbarPath,
+      'statusbarPath': statusbarPath.path,
     };
     await im.convert('overlay', options);
   }
@@ -186,12 +188,11 @@ class ImageProcessor {
   /// Append android navigation bar to screenshot.
   static Future<void> append(
       String tmpDir, ScreenImagePaths paths, String screenshotPath) async {
-    final screenshotNavbarPath = '$tmpDir/${paths.navbar}';
     final options = {
       'screenshotPath': screenshotPath,
-      'screenshotNavbarPath': screenshotNavbarPath,
+      'screenshotNavbarPath': paths.navbar?.path,
     };
-    await im.convert('append', options);
+    await im.convert('appendNavbar', options);
   }
 
   /// Frame a screenshot with image of device.
@@ -211,7 +212,7 @@ class ImageProcessor {
             : kDefaultAndroidBackground;
 
     final options = {
-      'framePath': tmpDir + '/' + paths.frame!.path,
+      'framePath': paths.frame!.path,
       'size': info.size,
       'resize': info.resize,
       'offset': info.offset,

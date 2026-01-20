@@ -6,6 +6,9 @@
 .idea/
 *.iml
 
+# VSCode
+.vscode/
+
 # Flutter
 /android
 /ios
@@ -31,3 +34,4 @@ example/android/fastlane
 # code coverage
 coverage/
 bin/*.exe
+.flutter-plugins*

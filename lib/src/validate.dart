@@ -9,8 +9,8 @@ import 'utils.dart' as utils;
 
 /// Check emulators and simulators are installed, devices attached,
 /// matching screen is available and tests exist.
-Future<bool> isValidConfig(
-    Config config, Screens screens, List<DaemonDevice> allDevices, List<DaemonEmulator> allEmulators) async {
+Future<bool> isValidConfig(Config config, Screens screens,
+    List<DaemonDevice> allDevices, List<DaemonEmulator> allEmulators) async {
   var isValid = true;
   var showDeviceGuide = false;
   // final configPath = config.configPath;
@@ -39,7 +39,8 @@ Future<bool> isValidConfig(
           !isEmulatorInstalled(allEmulators, configDevice)) {
         printError('No device attached or emulator installed for '
             'device \'${configDevice.name}\'.');
-        printError('  Either remove \'${configDevice.name}\' from config file or '
+        printError(
+            '  Either remove \'${configDevice.name}\' from config file or '
             'attach/install the matching device/emulator');
         isValid = false;
         showDeviceGuide = true;
@@ -117,7 +118,9 @@ bool isValidTestPaths(String driverArgs) {
   // if invalid path found during matching return, otherwise check default path
   return !(isInvalidPath
       ? isInvalidPath
-      : matchFound ? isInvalidPath : !pathExists(driverArgs));
+      : matchFound
+          ? isInvalidPath
+          : !pathExists(driverArgs));
 }
 
 /// Check if an emulator is installed.
@@ -191,8 +194,7 @@ void deviceGuide(Screens screens, List<DaemonDevice> devices,
 bool _isScreenAvailable(Screens screens, String deviceName) {
   final screenProps = screens.getScreen(deviceName);
   if (screenProps == null || Screens.isAndroidModelTypeScreen(screenProps)) {
-    printError(
-        'Screen not available for device \'$deviceName\'.');
+    printError('Screen not available for device \'$deviceName\'.');
     printError(
         '\n  Use a device with a supported screen or set \'frame: false\'');
     screenGuide(screens);
@@ -209,11 +211,10 @@ bool _isScreenAvailable(Screens screens, String deviceName) {
 void screenGuide(Screens screens) {
   printStatus('\nScreen Guide:');
   printStatus('\n  Supported screens:');
-  for (final os in [DeviceType.android, DeviceType.android]) {
+  for (final os in [DeviceType.android, DeviceType.ios]) {
     printStatus('    $os:');
     for (var deviceName in screens.getSupportedDeviceNamesByOs(os)) {
-      printStatus(
-          '      $deviceName (${screens.getScreen(deviceName)?.size})');
+      printStatus('      $deviceName (${screens.getScreen(deviceName)?.size})');
     }
   }
 }
@@ -221,9 +222,10 @@ void screenGuide(Screens screens) {
 void _printAttachedDevices(List<DaemonDevice> devices) {
   for (final device in devices) {
 //    if (device.emulator == false) {
-      device.deviceType == DeviceType.ios
-          ? printStatus('    ${device.iosModel} (${device.id})')
-          : printStatus('    ${device.emulator?'${device.emulatorId}':'${device.name}'} (${device.id})');
+    device.deviceType == DeviceType.ios
+        ? printStatus('    ${device.iosModel} (${device.id})')
+        : printStatus(
+            '    ${device.emulator ? '${device.emulatorId}' : '${device.name}'} (${device.id})');
 //    }
   }
 }
@@ -242,7 +244,7 @@ void _printSimulators() {
           : thisSim.compareTo(otherSim));
   if (simulatorNames.isNotEmpty) {
     printStatus('\n  Installed simulators:');
-    simulatorNames.forEach((simulatorName) =>
-        printStatus('    $simulatorName'));
+    simulatorNames
+        .forEach((simulatorName) => printStatus('    $simulatorName'));
   }
 }

@@ -37,7 +37,11 @@ void main() async {
 
   print(code);
 
-  await File("lib/generated/screens/screens.dart").writeAsString(code);
+  final screens = File("lib/generated/screens/screens.dart");
+  if (!await screens.exists()) {
+    await screens.create(recursive: true);
+  }
+  await screens.writeAsString(code);
 }
 
 Future<String> generateScreens(File file) async {

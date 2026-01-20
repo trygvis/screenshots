@@ -1,3 +1,6 @@
+/// environment variable to specify config path
+const kEnvConfigPath = 'SCREENSHOTS_YAML';
+
 /// default config file name
 const String kConfigFileName = 'screenshots.yaml';
 
